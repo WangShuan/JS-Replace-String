@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>更改所選文字</title>
+    <style>
+        #box {
+            width: 190px;
+            text-align: center;
+            margin: 100px auto;
+            border: 1px solid seagreen;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <input id="str" type="text" placeholder="請輸入查找的關鍵字"><input type="button" value="查詢" onclick="search()"> <br>
+        <input id="str2" type="text" placeholder="請輸入代替的關鍵字"><input type="button" value="替換" onclick="change()"><br>
+        <p id="text">
+            文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test文字測試test
+        </p>
+    </div>
+
+    <script>
+        var myP = document.getElementById('text')
+        var str = myP.innerText
+        var index = 0
+        var arr = str.split('') // 把所有字符串改成數組
+        var array = []
+        var j = 0
+        var newArr = []
+
+        var search = function () {
+            var searchValue = document.getElementById('str').value
+
+            if (searchValue == ''||str.indexOf(searchValue, index) == -1) {
+                alert('請輸入文字')
+            }
+
+            while (str.indexOf(searchValue, index) != -1) {
+                // 把所有找到的字符串的起始下標都存進數組
+                array.push(str.indexOf(searchValue, index))
+
+                // 然後起始下標要改成目前找到的字後面開始 
+                // 所以下一次的起始下標要變成目前找到的下標加搜尋的字符串字數
+                index = str.indexOf(searchValue, index) + searchValue.length
+            }
+
+
+            // 遍歷所有找到的字符串的下標
+            for (i = 0; i < array.length; i++) {
+
+                // 這裏存放替換後的數組下標 用來替換文字
+                newArr.push(array[i] - j)
+
+                // 使用數組的替換 把下標先移除 後增加樣式加回去
+                arr.splice(array[i] - j, searchValue.length, '<u style="color: teal;">' + searchValue + '</u>')
+                // 這裏要注意每次重新替換時下標位置必須更改一下
+                // 比如搜尋的字數如果是三個 等於你要先移除三個字 再添加一個字數回去
+                // 那下一次替換時的起始下標就要跟著減去移除的字數 再添加一個字數回去
+                j = j + searchValue.length - 1
+            }
+            myP.innerHTML = arr.join('')
+        }
+
+        var change = function () {
+            var changeValue = document.getElementById('str2').value
+
+            // 遍歷替換樣式後的數組的下標
+            for (k = 0; k < newArr.length; k++) {
+                // 把每個下標都刪除一個 並添加替換文字
+                arr.splice(newArr[k], 1, '<u style="color: red;">' + changeValue + '</u>')
+            }
+            myP.innerHTML = arr.join('')
+        }
+
+
+
+
+        // 簡易方式 以查找的字符串作為分割符分割出數組 
+        // 再以添加樣式後的查找字符串為分割符 把數組轉回字符串
+        // var i = document.getElementById('text').innerHTML
+        // var search = function () {
+        //     var a = document.getElementById('str').value
+        //     var mystr = '<span style="color:red">' + a + '</span>';
+        //     i = i.split(a).join(mystr)
+        //     myP.innerHTML=i
+        // }
+
+        // var change = function () {
+        //     var find = document.getElementById('str').value
+        //     var change2 = document.getElementById('str2').value
+        //     i = i.split(find).join(change2);
+        //     myP.innerHTML=i
+        // }
+    </script>
+</body>
+
+</html>
